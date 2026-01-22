@@ -1,0 +1,87 @@
+{
+  "level_name": "Уровень 0: Обучение",
+  "window_size": {
+    "width": 800,
+    "height": 600
+  },
+  "players": [
+    {
+      "type": "Wind",
+      "x": 100,
+      "y": 100,
+      "scale": 0.8,
+      "image": ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
+    },
+    {
+      "type": "Earth",
+      "x": 150,
+      "y": 100,
+      "scale": 0.8,
+      "image": ":resources:images/animated_characters/robot/robot_idle.png"
+    }
+  ],
+  "walls_static": [
+    {
+      "description": "Floor",
+      "x": 400,
+      "y": 32,
+      "scale": 0.5,
+      "image": ":resources:images/tiles/stoneMid.png",
+      "repeat_x": 12
+    },
+    {
+      "description": "Vertical wall",
+      "x": 32,
+      "y": 300,
+      "scale": 0.5,
+      "image": ":resources:images/tiles/stoneCenter.png",
+      "repeat_y": 8
+    }
+  ],
+  "doors": [
+    {
+      "id": "door_1",
+      "type": "HorizontalDoor",
+      "x": 600,
+      "y": 200,
+      "scale": 0.6,
+      "image": ":resources:images/tiles/boxCrate_double.png"
+    }
+  ],
+  "buttons": [
+    {
+      "target_id": "door_1",
+      "x": 300,
+      "y": 150,
+      "scale": 0.5,
+      "image": ":resources:images/tiles/buttonRed.png"
+    }
+  ],
+  "collectibles": [
+    {
+      "type": "Crystal",
+      "owner": "Wind",
+      "x": 400,
+      "y": 400,
+      "scale": 0.6,
+      "image": ":resources:images/items/gemBlue.png"
+    },
+    {
+      "type": "Crystal",
+      "owner": "Earth",
+      "x": 500,
+      "y": 400,
+      "scale": 0.6,
+      "image": ":resources:images/items/gemGreen.png"
+    }
+  ],
+  "hazards": [
+    {
+      "type": "Poison",
+      "x": 450,
+      "y": 60,
+      "scale": 0.5,
+      "image": ":resources:images/tiles/lava.png"
+    }
+  ]
+}
