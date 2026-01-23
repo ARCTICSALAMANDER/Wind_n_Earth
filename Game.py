@@ -99,10 +99,10 @@ class WindNEarthGame(arcade.Window):
 
     def loadSprites(self):
         '''Метод загрузки спрайтов из json-файла'''
-        self.loadCharacters()
         self.loadWalls()
-        # self.loadDoorsNButtons()
         self.loadCrystals()
+        self.loadCharacters()
+        # self.loadDoorsNButtons()
 
     def on_draw(self):
         self.playersList.draw()

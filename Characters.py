@@ -28,11 +28,12 @@ class Character(arcade.Sprite):
 
     def move(self):
         '''Метод перемещения персонажа'''
+        self.change_x = 0
         if self.leftKey in self.pressedKeys:
             self.change_x = -self.speed
-        if self.rightKey in self.pressedKeys:
+        elif self.rightKey in self.pressedKeys:
             self.change_x = self.speed
-
+            
     def on_key_release(self, key, modifiers):
         if key in self.pressedKeys:
             self.pressedKeys.remove(key)
