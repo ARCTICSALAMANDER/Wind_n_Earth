@@ -1,5 +1,6 @@
 import arcade
 from Characters import Character
+from Environment import *
 import json
 
 class WindNEarthGame(arcade.Window):
@@ -13,11 +14,11 @@ class WindNEarthGame(arcade.Window):
             self.data = json.load(f)
 
         self.playersList = arcade.SpriteList() 
-        self.loadCharacters()
-        self.playersList.append(self.Wind)
-        self.playersList.append(self.Earth)
-
         self.wallsList = arcade.SpriteList() # неподвижные стены и ЗАКРЫТЫЕ двери
+        self.crystalsList = arcade.SpriteList()
+        self.buttonsList = arcade.SpriteList()
+
+        self.loadSprites()
 
     def loadCharacters(self):
         '''Метод для загрузки персонажей из json-файла с 
@@ -44,8 +45,70 @@ class WindNEarthGame(arcade.Window):
             arcade.key.E
         )
 
+        self.playersList.append(self.Wind)
+        self.playersList.append(self.Earth)
+
+    def loadWalls(self):
+        '''Метод загрузки стен из json-файла'''
+        for i in range(len(self.data["walls_static"])):
+            wall = self.data["walls_static"][i]
+            if "repeat_x" in wall.keys():
+                for j in range(wall["repeat_x"]):
+                    self.wallsList.append(Wall(wall["image"], 
+                                               wall["scale"], 
+                                               wall["x"] + 100 * j, 
+                                               wall["y"]))
+            elif "repeat_y" in wall.keys():
+                for j in range(wall["repeat_y"]):
+                    self.wallsList.append(Wall(wall["image"], 
+                                               wall["scale"], 
+                                               wall["x"], 
+                                               wall["y"] + 100 * j))
+                    
+    def loadCrystals(self):
+        '''Метод загрузки кристаллов из json-файла'''
+        for i in range(len(self.data["crystals"])):
+            crystalData = self.data["crystals"][i]
+            crystal = Crystal(crystalData["image"],
+                              crystalData["scale"],
+                              crystalData["x"],
+                              crystalData["y"],
+                              self,
+                              crystalData["owner"])
+            
+            self.crystalsList.append(crystal)
+
+    def loadDoorsNButtons(self):
+        '''Метод загрузки дверей и кнопок из json-файла'''
+        for i in range(len(self.data["doors"])):
+            doorData = self.data["doors"][i]
+            door = Door(doorData["image"],
+                        doorData["scale"],
+                        doorData["x"],
+                        doorData["y"],
+                        doorData["id"])
+            self.wallsList.append(door)
+            
+            buttonData = self.data["buttons"][i]
+            button = Button(buttonData["image"],
+                            buttonData["scale"],
+                            buttonData["x"],
+                            buttonData["y"],
+                            buttonData["target_id"])
+            self.buttonsList.append(button)
+
+    def loadSprites(self):
+        '''Метод загрузки спрайтов из json-файла'''
+        self.loadCharacters()
+        self.loadWalls()
+        self.loadDoorsNButtons()
+        self.loadCrystals()
+
     def on_draw(self):
         self.playersList.draw()
+        self.wallsList.draw()
+        self.crystalsList.draw()
+        self.buttonsList.draw()
 
 
 if __name__ == '__main__':

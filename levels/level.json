@@ -57,9 +57,8 @@
       "image": ":resources:images/tiles/buttonRed.png"
     }
   ],
-  "collectibles": [
+  "crystals": [
     {
-      "type": "Crystal",
       "owner": "Wind",
       "x": 400,
       "y": 400,
@@ -67,21 +66,11 @@
       "image": ":resources:images/items/gemBlue.png"
     },
     {
-      "type": "Crystal",
       "owner": "Earth",
       "x": 500,
       "y": 400,
       "scale": 0.6,
       "image": ":resources:images/items/gemGreen.png"
-    }
-  ],
-  "hazards": [
-    {
-      "type": "Poison",
-      "x": 450,
-      "y": 60,
-      "scale": 0.5,
-      "image": ":resources:images/tiles/lava.png"
     }
   ]
 }

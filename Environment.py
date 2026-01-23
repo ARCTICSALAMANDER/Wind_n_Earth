@@ -5,8 +5,9 @@ import arcade
 class Door(arcade.Sprite):
     '''Класс двери'''
 
-    def __init__(self, image, x, y):
-        super().__init__(image, scale=0.5)
+    def __init__(self, image, scale, x, y, doorId):
+        super().__init__(image, scale)
+        self.doorId = doorId # номер, по которому связываем кнопку с дверью
 
     def open(self):
         '''Метод открытия двери'''
@@ -23,7 +24,9 @@ class Door(arcade.Sprite):
 class Button(arcade.Sprite):
     '''Класс кнопки'''
 
-    def __init__(self, door: Door):
+    def __init__(self, image, scale, x, y, door: Door):
+        super().__init__(image, scale)
+        self.position = (x, y)
         # сюда кладете дверь, которая будет открываться
         # по нажатию этой кнопки, при коллизии любого
         # персонажа и этой кнопки вызвать self.door.open()
@@ -38,14 +41,21 @@ class Button(arcade.Sprite):
 class Crystal(arcade.Sprite):
     '''Класс кристалла'''
 
-    def __init__(self, game, character):
-        # сюда кладете КЛАСС персонажа, который сможет собрать
-        # этот кристалл. Если с кристаллом произойдет коллизия,
-        # то соберется он при условии, что класс у self.character
-        # и персонажа, соприкоснувшегося с ним, одинаковый
-        # (погуглите функцию isinstance)
+    def __init__(self, image, scale, x, y, game, character):
+        super().__init__(image, scale)
+        self.position = (x, y)
+        # сюда кладете строку с именем персонажа, который должен
+        # этот кристалл собрать ("Wind" / "Earth"). При коллизии
+        # проверяте, что атрибут name у персонажа равен self.character,
+        # затем делаем self.kill(), чтобы удалить кристалл
         self.character = character
 
         # когда кристалл соберется нужным персонажем, нужно сделать
         # self.game.crystalCount += 1
         self.game = game
+
+
+class Wall(arcade.Sprite):
+    def __init__(self, image, scale, x, y):
+        super().__init__(image, scale)
+        self.position = (x, y)
