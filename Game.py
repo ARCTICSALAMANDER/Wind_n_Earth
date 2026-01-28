@@ -13,10 +13,10 @@ class WindNEarthGame(arcade.Window):
         with open("./levels/level.json", 'r', encoding='utf-8') as f:
             self.data = json.load(f)
 
-        self.playersList = arcade.SpriteList() 
         self.wallsList = arcade.SpriteList() # неподвижные стены и ЗАКРЫТЫЕ двери
         self.crystalsList = arcade.SpriteList()
         self.buttonsList = arcade.SpriteList()
+        self.playersList = arcade.SpriteList() 
 
         self.loadSprites()
 
@@ -33,6 +33,7 @@ class WindNEarthGame(arcade.Window):
             arcade.key.RIGHT,
             arcade.key.GREATER
         )
+        self.Wind.physSetup(self)
 
         self.Earth = Character(
             self.data["players"][1]["image"],
@@ -41,9 +42,10 @@ class WindNEarthGame(arcade.Window):
             self.data["players"][1]["y"],
             arcade.key.W,
             arcade.key.A,
-            arcade.key.S,
+            arcade.key.D,
             arcade.key.E
         )
+        self.Earth.physSetup(self)
 
         self.playersList.append(self.Wind)
         self.playersList.append(self.Earth)
@@ -51,19 +53,21 @@ class WindNEarthGame(arcade.Window):
     def loadWalls(self):
         '''Метод загрузки стен из json-файла'''
         for i in range(len(self.data["walls_static"])):
-            wall = self.data["walls_static"][i]
-            if "repeat_x" in wall.keys():
-                for j in range(wall["repeat_x"]):
-                    self.wallsList.append(Wall(wall["image"], 
-                                               wall["scale"], 
-                                               wall["x"] + 100 * j, 
-                                               wall["y"]))
-            elif "repeat_y" in wall.keys():
-                for j in range(wall["repeat_y"]):
-                    self.wallsList.append(Wall(wall["image"], 
-                                               wall["scale"], 
-                                               wall["x"], 
-                                               wall["y"] + 100 * j))
+            wallData = self.data["walls_static"][i]
+            wall = Wall(wallData["image"], wallData["scale"], wallData["x"], wallData["y"]) # для получения ширины или высоты
+            # print(wall.width, wall.height) 64, 64
+            if "repeat_x" in wallData.keys():
+                for j in range(wallData["repeat_x"]):
+                    self.wallsList.append(Wall(wallData["image"], 
+                                               wallData["scale"], 
+                                               wallData["x"] + wall.width * j, 
+                                               wallData["y"]))
+            elif "repeat_y" in wallData.keys():
+                for j in range(wallData["repeat_y"]):
+                    self.wallsList.append(Wall(wallData["image"], 
+                                               wallData["scale"], 
+                                               wallData["x"], 
+                                               wallData["y"] + wall.height * j))
                     
     def loadCrystals(self):
         '''Метод загрузки кристаллов из json-файла'''
@@ -105,6 +109,8 @@ class WindNEarthGame(arcade.Window):
         # self.loadDoorsNButtons()
 
     def on_draw(self):
+        self.clear()
+
         self.playersList.draw()
         self.wallsList.draw()
         self.crystalsList.draw()
@@ -119,6 +125,14 @@ class WindNEarthGame(arcade.Window):
 
         self.Earth.physEngine.update()
         self.Wind.physEngine.update()
+
+    def on_key_press(self, key, modifiers):
+        self.Wind.on_key_press(key, modifiers)
+        self.Earth.on_key_press(key, modifiers)
+
+    def on_key_release(self, key, modifiers):
+        self.Wind.on_key_release(key, modifiers)
+        self.Earth.on_key_release(key, modifiers)
 
 
 if __name__ == '__main__':

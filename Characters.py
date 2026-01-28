@@ -16,9 +16,13 @@ class Character(arcade.Sprite):
 
         self.pressedKeys = set()
 
-        self.speed = 10
-        self.jumpSpeed = 20
-        self.physEngine = arcade.PhysicsEnginePlatformer(self)
+        self.speed = 5
+        self.jumpSpeed = 7
+
+    def physSetup(self, game):
+        '''Метод создания физических движков'''
+        self.game = game
+        self.physEngine = arcade.PhysicsEnginePlatformer(self, game.wallsList, gravity_constant=0.5)
 
     def on_key_press(self, key, modifiers):
         self.pressedKeys.add(key)
