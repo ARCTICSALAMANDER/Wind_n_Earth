@@ -8,17 +8,34 @@ class Door(arcade.Sprite):
     def __init__(self, image, scale, x, y, doorId):
         super().__init__(image, scale)
         self.doorId = doorId # номер, по которому связываем кнопку с дверью
+        self.isOpen = True
+
+        self.position = (x, y)
+        self.center_x = x
+        self.center_y = 0
+
+        self.opened_x = self.center_x - self.width
+
+        self.speed = 10
 
     def open(self):
         '''Метод открытия двери'''
         # чтобы было проще с анимацией, делаем пока что
         # только горизонтальные двери, которые по нажатию
         # кнопки будут уезжать внутрь стены
-        ...
+        self.isOpen = True
 
     def close(self):
         '''Метод закрытия двери'''
         # дверь выезжает из стены
+        self.isOpen = False
+
+    def update(self):
+        if self.isOpen and self.center_x != self.opened_x:
+            self.center_x += self.speed
+        
+        if not self.isOpen and self.center_x == self.opened_x:
+            self.center_x -= self.speed
 
 
 class Button(arcade.Sprite):

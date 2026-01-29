@@ -18,6 +18,7 @@ class Character(arcade.Sprite):
 
         self.speed = 5
         self.jumpSpeed = 7
+        self.physEngine = None
 
     def physSetup(self, game):
         '''Метод создания физических движков'''
@@ -27,7 +28,7 @@ class Character(arcade.Sprite):
     def on_key_press(self, key, modifiers):
         self.pressedKeys.add(key)
         if self.upKey == key:
-            if self.physEngine.can_jump():
+            if self.physEngine and self.physEngine.can_jump():
                 self.change_y = self.jumpSpeed
 
     def move(self):

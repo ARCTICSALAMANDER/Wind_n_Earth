@@ -93,20 +93,20 @@ class WindNEarthGame(arcade.Window):
                         doorData["id"])
             self.wallsList.append(door)
             
-            buttonData = self.data["buttons"][i]
-            button = Button(buttonData["image"],
-                            buttonData["scale"],
-                            buttonData["x"],
-                            buttonData["y"],
-                            buttonData["target_id"])
-            self.buttonsList.append(button)
+            # buttonData = self.data["buttons"][i]
+            # button = Button(buttonData["image"],
+            #                 buttonData["scale"],
+            #                 buttonData["x"],
+            #                 buttonData["y"],
+            #                 buttonData["target_id"])
+            # self.buttonsList.append(button)
 
     def loadSprites(self):
         '''Метод загрузки спрайтов из json-файла'''
         self.loadWalls()
         self.loadCrystals()
         self.loadCharacters()
-        # self.loadDoorsNButtons()
+        self.loadDoorsNButtons()
 
     def on_draw(self):
         self.clear()
@@ -123,8 +123,9 @@ class WindNEarthGame(arcade.Window):
         self.Wind.move()
         self.Earth.move()
 
-        self.Earth.physEngine.update()
-        self.Wind.physEngine.update()
+        if self.Earth.physEngine and self.Wind.physEngine:
+            self.Earth.physEngine.update()
+            self.Wind.physEngine.update()
 
     def on_key_press(self, key, modifiers):
         self.Wind.on_key_press(key, modifiers)
