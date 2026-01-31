@@ -48,4 +48,4 @@ class Crystal(arcade.Sprite):
     def collect(self, character):
         if isinstance(character, self.character):
             self.game.crystalCount += 1
-            self.remove_from_sprite_lists()
+            self.remove_from_sprite_lists() 
