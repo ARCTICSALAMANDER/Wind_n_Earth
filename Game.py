@@ -17,6 +17,7 @@ class WindNEarthGame(arcade.Window):
         self.crystalsList = arcade.SpriteList()
         self.buttonsList = arcade.SpriteList()
         self.playersList = arcade.SpriteList() 
+        self.thingsList = arcade.SpriteList()
 
         self.loadSprites()
 
@@ -24,6 +25,7 @@ class WindNEarthGame(arcade.Window):
         '''Метод для загрузки персонажей из json-файла с 
             данными об уровне'''
         self.Wind = Character(
+            "Wind",
             self.data["players"][0]["image"],
             self.data["players"][0]["scale"],
             self.data["players"][0]["x"],
@@ -31,11 +33,13 @@ class WindNEarthGame(arcade.Window):
             arcade.key.UP,
             arcade.key.LEFT,
             arcade.key.RIGHT,
-            arcade.key.GREATER
+            arcade.key.GREATER,
+            self
         )
-        self.Wind.physSetup(self)
+        self.Wind.physSetup()
 
         self.Earth = Character(
+            "Earth",
             self.data["players"][1]["image"],
             self.data["players"][1]["scale"],
             self.data["players"][1]["x"],
@@ -43,9 +47,10 @@ class WindNEarthGame(arcade.Window):
             arcade.key.W,
             arcade.key.A,
             arcade.key.D,
-            arcade.key.E
+            arcade.key.E,
+            self
         )
-        self.Earth.physSetup(self)
+        self.Earth.physSetup()
 
         self.playersList.append(self.Wind)
         self.playersList.append(self.Earth)
@@ -115,6 +120,7 @@ class WindNEarthGame(arcade.Window):
         self.wallsList.draw()
         self.crystalsList.draw()
         self.buttonsList.draw()
+        self.thingsList.draw()
 
     def on_update(self, delta_time):
         self.Wind.change_x = 0
@@ -122,6 +128,17 @@ class WindNEarthGame(arcade.Window):
 
         self.Wind.move()
         self.Earth.move()
+
+        windStream = self.Wind.summonedThing
+        if windStream.active:
+            for player in self.playersList:
+                if arcade.check_for_collision(player, windStream):
+                    player.change_y = 8
+
+                # чтобы игрок не вылетал за пределы воздушного потока
+                if player.top > windStream.top:
+                    player.top = windStream.top
+                    player.change_y = 0
 
         if self.Earth.physEngine and self.Wind.physEngine:
             self.Earth.physEngine.update()
