@@ -60,7 +60,9 @@ class Character(arcade.Sprite):
 
         self.summonedThing.center_x = self.center_x
         self.summonedThing.bottom = self.bottom
-        self.game.thingsList.append(self.summonedThing)
+        
+        if self.summonedThing not in self.game.thingsList:
+            self.game.thingsList.append(self.summonedThing)
 
     def on_key_release(self, key, modifiers):
         if key in self.pressedKeys:
@@ -91,10 +93,9 @@ class SummonedThing(arcade.SpriteSolidColor):
             return
 
         if self.owner.name == "Wind":
-            self.timer += 0.1
-            self.alpha = int(140 + math.sin(self.timer) * 40)
-        
+            self.timer += delta_time
+            self.alpha = int(140 + math.sin(self.timer * 6) * 40)       
         elif self.owner.name == "Earth":
             # Куб земли просто стоит там, где его создали, 
-            # но его можно было бы сделать толкаемым
+            # но его сделать толкаемым
             pass

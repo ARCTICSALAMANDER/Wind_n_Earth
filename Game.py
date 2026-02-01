@@ -128,6 +128,11 @@ class WindNEarthGame(arcade.Window):
 
         self.thingsList.update(delta_time)
 
+        if self.Earth.physEngine:
+            self.Earth.physEngine.update()
+        if self.Wind.physEngine:
+            self.Wind.physEngine.update()
+
         windStream = self.Wind.summonedThing
         if windStream and windStream.active:
             for player in self.playersList:
@@ -138,11 +143,6 @@ class WindNEarthGame(arcade.Window):
                     if player.top > windStream.top:
                         player.top = windStream.top
                         player.change_y = 0
-
-        if self.Earth.physEngine:
-            self.Earth.physEngine.update()
-        if self.Wind.physEngine:
-            self.Wind.physEngine.update()
 
     def on_key_press(self, key, modifiers):
         self.Wind.on_key_press(key, modifiers)
