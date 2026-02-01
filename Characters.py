@@ -1,4 +1,5 @@
 import arcade
+import math
 
 
 class Character(arcade.Sprite):
@@ -24,12 +25,12 @@ class Character(arcade.Sprite):
         self.jumpSpeed = 7
         self.physEngine = None
 
-        self.summonedThingSetup()
-
     def physSetup(self):
         '''Метод создания физических движков'''
         self.physEngine = arcade.PhysicsEnginePlatformer(
             self, self.game.wallsList, gravity_constant=0.5)
+        
+        self.summonedThingSetup()
         
     def summonedThingSetup(self):
         '''Метод создания кубика Земли или воздушного потока Ветра'''
@@ -42,7 +43,8 @@ class Character(arcade.Sprite):
             if self.physEngine and self.physEngine.can_jump():
                 self.change_y = self.jumpSpeed
 
-        self.summon()
+        if key == self.castKey:
+            self.summon()
 
     def move(self):
         '''Метод перемещения персонажа'''
@@ -54,13 +56,11 @@ class Character(arcade.Sprite):
 
     def summon(self):
         '''Метод призыва кубика или ветряного потока'''
-        if self.castKey in self.pressedKeys:
-            self.summonedThing.active = True
+        self.summonedThing.active = True
 
-            if self.summonedThing in self.game.thingsList: # только один кубик/поток за раз
-                self.summonedThing.kill()
-
-            self.game.thingsList.append(self.summonedThing)
+        self.summonedThing.center_x = self.center_x
+        self.summonedThing.bottom = self.bottom
+        self.game.thingsList.append(self.summonedThing)
 
     def on_key_release(self, key, modifiers):
         if key in self.pressedKeys:
@@ -72,7 +72,7 @@ class Character(arcade.Sprite):
 
 class SummonedThing(arcade.SpriteSolidColor):
     def __init__(self, width, height, color: tuple, owner: Character, game):
-        super().__init__(width, height, ccolor=color)
+        super().__init__(width, height, color=color)
         self.owner = owner
         self.game = game
         self.physEngine = None
@@ -83,3 +83,18 @@ class SummonedThing(arcade.SpriteSolidColor):
 
         if self.owner.name == "Earth":
             self.physEngine = self.owner.physEngine
+
+        self.timer = 0
+
+    def update(self, delta_time):
+        if not self.active:
+            return
+
+        if self.owner.name == "Wind":
+            self.timer += 0.1
+            self.alpha = int(140 + math.sin(self.timer) * 40)
+        
+        elif self.owner.name == "Earth":
+            # Куб земли просто стоит там, где его создали, 
+            # но его можно было бы сделать толкаемым
+            pass

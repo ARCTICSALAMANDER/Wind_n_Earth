@@ -66,8 +66,13 @@ class Crystal(arcade.Sprite):
 
         for char in characters:
             if arcade.check_for_collision(self, char):
-                if isinstance(char, self.character):
+                if self.character == char.name:
                     self.collected = True
                     self.game.crystalCount += 1
                     self.remove_from_sprite_lists()
                     break
+
+class Wall(arcade.Sprite):
+    def __init__(self, image, scale, x, y):
+        super().__init__(image, scale)
+        self.position = (x, y)

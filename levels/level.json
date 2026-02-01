@@ -1,76 +1,21 @@
 {
-  "level_name": "Уровень 0: Обучение",
-  "window_size": {
-    "width": 800,
-    "height": 600
-  },
   "players": [
-    {
-      "type": "Wind",
-      "x": 100,
-      "y": 100,
-      "scale": 0.8,
-      "image": ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png"
-    },
-    {
-      "type": "Earth",
-      "x": 150,
-      "y": 100,
-      "scale": 0.8,
-      "image": ":resources:images/animated_characters/robot/robot_idle.png"
-    }
+    { "name": "Wind", "image": ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png", "scale": 0.8, "x": 100, "y": 150 },
+    { "name": "Earth", "image": ":resources:images/animated_characters/robot/robot_idle.png", "scale": 0.8, "x": 150, "y": 150 }
   ],
   "walls_static": [
-    {
-      "description": "Floor",
-      "x": 0,
-      "y": 0,
-      "scale": 0.5,
-      "image": ":resources:images/tiles/stoneMid.png",
-      "repeat_x": 12
-    },
-    {
-      "description": "Vertical wall",
-      "x": 0,
-      "y": 64,
-      "scale": 0.5,
-      "image": ":resources:images/tiles/stoneCenter.png",
-      "repeat_y": 8
-    }
-  ],
-  "doors": [
-    {
-      "id": "door_1",
-      "type": "HorizontalDoor",
-      "x": 600,
-      "y": 200,
-      "scale": 0.6,
-      "image": ":resources:images/tiles/boxCrate_double.png"
-    }
-  ],
-  "buttons": [
-    {
-      "target_id": "door_1",
-      "x": 300,
-      "y": 150,
-      "scale": 0.5,
-      "image": ":resources:images/tiles/buttonRed.png"
-    }
+    { "description": "Floor", "image": ":resources:images/tiles/stoneMid.png", "scale": 0.5, "x": 32, "y": 32, "repeat_x": 13 }
   ],
   "crystals": [
-    {
-      "owner": "Wind",
-      "x": 400,
-      "y": 400,
-      "scale": 0.6,
-      "image": ":resources:images/items/gemBlue.png"
-    },
-    {
-      "owner": "Earth",
-      "x": 500,
-      "y": 400,
-      "scale": 0.6,
-      "image": ":resources:images/items/gemGreen.png"
-    }
-  ]
+    { "owner": "Wind", "image": ":resources:images/items/gemBlue.png", "scale": 0.5, "x": 400, "y": 200 },
+    { "owner": "Earth", "image": ":resources:images/items/gemGreen.png", "scale": 0.5, "x": 500, "y": 200 }
+  ],
+  "doors": [
+    { "id": "door1", "image": ":resources:images/tiles/boxCrate_double.png", "x": 700, "y": 96 }
+  ],
+  "summoned_things": {
+    "width": 64,
+    "height": 150,
+    "color": [135, 206, 250, 150]
+  }
 }
