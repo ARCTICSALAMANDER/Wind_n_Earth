@@ -1,78 +1,73 @@
-# НЕ ИМПОРТИРОВАТЬ КЛАССЫ ИЗ ДРУГИХ СКРИПТОВ ПРОЕКТА
 import arcade
 
 
 class Door(arcade.Sprite):
-    '''Класс двери'''
 
-    def __init__(self, image, scale, x, y, doorId):
-        super().__init__(image, scale)
-        self.doorId = doorId # номер, по которому связываем кнопку с дверью
-        self.isOpen = True
-
-        self.position = (x, y)
+    def __init__(self, image, x, y):
+        super().__init__(image, scale=0.5)
         self.center_x = x
-        self.center_y = 0
+        self.center_y = y
 
-        self.opened_x = self.center_x - self.width
-
-        self.speed = 10
+        self.closed_x = x
+        self.is_open = False
+        self.open_offset = 64
 
     def open(self):
-        '''Метод открытия двери'''
-        # чтобы было проще с анимацией, делаем пока что
-        # только горизонтальные двери, которые по нажатию
-        # кнопки будут уезжать внутрь стены
-        self.isOpen = True
+        if not self.is_open:
+            self.center_x -= self.open_offset
+            self.is_open = True
 
     def close(self):
-        '''Метод закрытия двери'''
-        # дверь выезжает из стены
-        self.isOpen = False
-
-    def update(self):
-        if self.isOpen and self.center_x != self.opened_x:
-            self.center_x += self.speed
-        
-        if not self.isOpen and self.center_x == self.opened_x:
-            self.center_x -= self.speed
+        if self.is_open:
+            self.center_x = self.closed_x
+            self.is_open = False
 
 
 class Button(arcade.Sprite):
-    '''Класс кнопки'''
 
-    def __init__(self, image, scale, x, y, door: Door):
-        super().__init__(image, scale)
-        self.position = (x, y)
-        # сюда кладете дверь, которая будет открываться
-        # по нажатию этой кнопки, при коллизии любого
-        # персонажа и этой кнопки вызвать self.door.open()
+    def __init__(self, image, x, y, door: Door):
+        super().__init__(image, scale=0.5)
+        self.center_x = x
+        self.center_y = y
+
         self.door = door
-
-        # нажата ли кнопка. Если персонаж наступит, 
-        # self.isPressed = True, если уйдет с кнопки - 
-        # self.isPressed = False и self.door.close()
         self.isPressed = False
+
+    def update(self, characters):
+        pressed_now = False
+
+        for character in characters:
+            if arcade.check_for_collision(self, character):
+                pressed_now = True
+                break
+
+        if pressed_now and not self.isPressed:
+            self.isPressed = True
+            self.door.open()
+        elif not pressed_now and self.isPressed:
+            self.isPressed = False
+            self.door.close()
 
 
 class Crystal(arcade.Sprite):
-    '''Класс кристалла'''
 
-    def __init__(self, image, scale, x, y, game, character):
-        super().__init__(image, scale)
-        self.position = (x, y)
-        # сюда кладете строку с именем персонажа, который должен
-        # этот кристалл собрать ("Wind" / "Earth"). При коллизии
-        # проверяте, что атрибут name у персонажа равен self.character,
-        # затем делаем self.kill(), чтобы удалить кристалл
+    def __init__(self, image, x, y, game, character):
+        super().__init__(image, scale=0.5)
+        self.center_x = x
+        self.center_y = y
+
         self.character = character
-
-        # когда кристалл соберется нужным персонажем, нужно сделать
-        # self.game.crystalCount += 1
         self.game = game
+        self.collected = False
 
+    def update(self, characters):
+        if self.collected:
+            return
 
-class Wall(arcade.Sprite):
-    def __init__(self, image, scale, x, y):
-        super().__init__(image, scale)
-        self.position = (x, y)
+        for char in characters:
+            if arcade.check_for_collision(self, char):
+                if isinstance(char, self.character):
+                    self.collected = True
+                    self.game.crystalCount += 1
+                    self.remove_from_sprite_lists()
+                    break
