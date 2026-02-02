@@ -1,15 +1,6 @@
 import arcade
 
 
-class EscButton(arcade.Sprite):
-    def __init__(self):
-        super().__init__()
-        # поставить эту кнопку в левый верхний угол с помощью 
-        # self.position = (координата по x, координата по y)
-
-        # в методе on_mouse_press 
-
-
 class ActionButton(arcade.Sprite):
     def __init__(self, action):
         super().__init__()
