@@ -5,9 +5,10 @@ from Environment import *
 from Consts import *
 
 class WindNEarthGame(arcade.Window):
-    def __init__(self, width, height, title):
+    def __init__(self, width, height, title, levelDataFile: str):
         super().__init__(width, height, title)
         arcade.set_background_color(arcade.color.ALICE_BLUE)
+        self.levelDataFile = levelDataFile
         self.data = dict()
         
         # Списки спрайтов
@@ -17,11 +18,12 @@ class WindNEarthGame(arcade.Window):
         self.playersList = arcade.SpriteList() 
         self.thingsList = arcade.SpriteList()
         
+        self.totalCrystalCount = 10
         self.crystalCount = 0
 
     def setup(self):
         '''Загрузка уровня и инициализация объектов'''
-        with open("./levels/level.json", 'r', encoding='utf-8') as f:
+        with open(self.levelDataFile, 'r', encoding='utf-8') as f:
             self.data = json.load(f)
 
         self.loadSprites()
@@ -122,6 +124,9 @@ class WindNEarthGame(arcade.Window):
         self.thingsList.draw()
         self.playersList.draw()
 
+        # здесь нужно отрисовать таймер уровня и 
+        # кол-во собранных кристаллов с помощью arcade.draw_text()
+
     def on_update(self, delta_time):
         self.Wind.move()
         self.Earth.move()
@@ -153,6 +158,6 @@ class WindNEarthGame(arcade.Window):
         self.Earth.on_key_release(key, modifiers)
 
 if __name__ == '__main__':
-    window = WindNEarthGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    window = WindNEarthGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, "./level.json")
     window.setup()
     arcade.run()
