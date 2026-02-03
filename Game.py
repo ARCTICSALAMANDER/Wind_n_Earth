@@ -128,3 +128,135 @@ class WindNEarthGame(arcade.Window):
                 crystalData.get("owner", None)
             )
             self.crystalsList.append(crystal)
+
+    def loadDoorsNButtons(self):
+        """Создание дверей и кнопок уровня."""
+        for doorData in self.data.get("doors", []):
+            door = Door(doorData["image"], doorData["x"], doorData["y"])
+            self.wallsList.append(door)
+
+    def loadSprites(self):
+        """Загрузка всех спрайтов уровня."""
+        self.loadWalls()
+        self.loadCrystals()
+        self.loadCharacters()
+        self.loadDoorsNButtons()
+
+    def on_draw(self):
+        self.clear()
+
+        self.wallsList.draw()
+        self.buttonsList.draw()
+        self.crystalsList.draw()
+        self.thingsList.draw()
+        self.playersList.draw()
+
+        # Отображение таймера
+        total_seconds = int(self.time_elapsed)
+        minutes = total_seconds // 60
+        seconds = total_seconds % 60
+        time_str = f"{minutes:02d}:{seconds:02d}"
+
+        padding = 10
+        font_size = 20
+        arcade.draw_text(
+            f"Время: {time_str}",
+            padding,
+            self.height - padding - font_size,
+            arcade.color.BLACK,
+            font_size
+        )
+
+        # Отображение собранных кристаллов
+        collected = self.totalCrystalCount - len(self.crystalsList)
+        arcade.draw_text(
+            f"Кристаллы: {collected} / {self.totalCrystalCount}",
+            self.width - padding,
+            self.height - padding - font_size,
+            arcade.color.BLACK,
+            font_size,
+            anchor_x="right"
+        )
+
+        # Отображение паузы
+        if self.paused:
+            overlay_w = 400
+            overlay_h = 200
+            arcade.draw_rectangle_filled(
+                self.width / 2,
+                self.height / 2,
+                overlay_w,
+                overlay_h,
+                arcade.color.BLACK_FROM_SPACE,
+                180
+            )
+            arcade.draw_text(
+                "Пауза",
+                self.width / 2,
+                self.height / 2 + 40,
+                arcade.color.WHITE,
+                34,
+                anchor_x="center"
+            )
+            arcade.draw_text(
+                "ESC — продолжить",
+                self.width / 2,
+                self.height / 2 - 20,
+                arcade.color.LIGHT_GRAY,
+                16,
+                anchor_x="center"
+            )
+
+    def on_update(self, delta_time):
+        """Обновление состояния игры каждый кадр."""
+        if not self.paused:
+            self.time_elapsed += delta_time
+
+        if self.Wind:
+            self.Wind.move()
+        if self.Earth:
+            self.Earth.move()
+
+        self.thingsList.update(delta_time)
+
+        if getattr(self.Earth, "physEngine", None):
+            self.Earth.physEngine.update()
+        if getattr(self.Wind, "physEngine", None):
+            self.Wind.physEngine.update()
+
+        windStream = getattr(self.Wind, "summonedThing", None)
+        if windStream and getattr(windStream, "active", False):
+            for player in self.playersList:
+                if arcade.check_for_collision(player, windStream):
+                    player.change_y = PLAYER_JUMP_SPEED * 0.8
+                    if player.top > windStream.top:
+                        player.top = windStream.top
+                        player.change_y = 0
+
+        self.crystalCount = self.totalCrystalCount - len(self.crystalsList)
+
+    def on_key_press(self, key, modifiers):
+        if self.Wind:
+            self.Wind.on_key_press(key, modifiers)
+        if self.Earth:
+            self.Earth.on_key_press(key, modifiers)
+
+        if key == arcade.key.ESCAPE:
+            self.paused = not self.paused
+
+    def on_key_release(self, key, modifiers):
+        if self.Wind:
+            self.Wind.on_key_release(key, modifiers)
+        if self.Earth:
+            self.Earth.on_key_release(key, modifiers)
+
+
+if __name__ == '__main__':
+    window = WindNEarthGame(
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT,
+        SCREEN_TITLE,
+        "levels/level.json"
+    )
+    window.setup()
+    arcade.run()
