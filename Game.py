@@ -4,20 +4,21 @@ from Characters import Character
 from Environment import *
 from Consts import *
 
+
 class WindNEarthGame(arcade.Window):
     def __init__(self, width, height, title, levelDataFile: str):
         super().__init__(width, height, title)
         arcade.set_background_color(arcade.color.ALICE_BLUE)
         self.levelDataFile = levelDataFile
         self.data = dict()
-        
+
         # Списки спрайтов
         self.wallsList = arcade.SpriteList()
         self.crystalsList = arcade.SpriteList()
         self.buttonsList = arcade.SpriteList()
-        self.playersList = arcade.SpriteList() 
+        self.playersList = arcade.SpriteList()
         self.thingsList = arcade.SpriteList()
-        
+
         self.totalCrystalCount = 10
         self.crystalCount = 0
 
@@ -46,8 +47,8 @@ class WindNEarthGame(arcade.Window):
 
         self.Earth = Character(
             "Earth",
-            EARTH_IMAGE, 
-            CHAR_SCALE,  
+            EARTH_IMAGE,
+            CHAR_SCALE,
             self.data["players"][1]["x"],
             self.data["players"][1]["y"],
             arcade.key.W,
@@ -65,22 +66,23 @@ class WindNEarthGame(arcade.Window):
         '''Загрузка стен'''
         for wallData in self.data["walls_static"]:
             # Создаем временный объект, чтобы узнать его размеры для повторений
-            temp_wall = Wall(wallData["image"], wallData["scale"], wallData["x"], wallData["y"])
-            
+            temp_wall = Wall(
+                wallData["image"], wallData["scale"], wallData["x"], wallData["y"])
+
             if "repeat_x" in wallData:
                 for j in range(wallData["repeat_x"]):
                     self.wallsList.append(Wall(
-                        wallData["image"], 
-                        wallData["scale"], 
-                        wallData["x"] + temp_wall.width * j, 
+                        wallData["image"],
+                        wallData["scale"],
+                        wallData["x"] + temp_wall.width * j,
                         wallData["y"]
                     ))
             elif "repeat_y" in wallData:
                 for j in range(wallData["repeat_y"]):
                     self.wallsList.append(Wall(
-                        wallData["image"], 
-                        wallData["scale"], 
-                        wallData["x"], 
+                        wallData["image"],
+                        wallData["scale"],
+                        wallData["x"],
                         wallData["y"] + temp_wall.height * j
                     ))
             else:
@@ -124,7 +126,7 @@ class WindNEarthGame(arcade.Window):
         self.thingsList.draw()
         self.playersList.draw()
 
-        # здесь нужно отрисовать таймер уровня и 
+        # здесь нужно отрисовать таймер уровня и
         # кол-во собранных кристаллов с помощью arcade.draw_text()
 
     def on_update(self, delta_time):
@@ -143,7 +145,7 @@ class WindNEarthGame(arcade.Window):
             for player in self.playersList:
                 if arcade.check_for_collision(player, windStream):
                     player.change_y = PLAYER_JUMP_SPEED * 0.8
-                    
+
                     # Ограничение высоты взлета
                     if player.top > windStream.top:
                         player.top = windStream.top
@@ -157,7 +159,9 @@ class WindNEarthGame(arcade.Window):
         self.Wind.on_key_release(key, modifiers)
         self.Earth.on_key_release(key, modifiers)
 
+
 if __name__ == '__main__':
-    window = WindNEarthGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, "./level.json")
+    window = WindNEarthGame(SCREEN_WIDTH, SCREEN_HEIGHT,
+                            SCREEN_TITLE, "./level.json")
     window.setup()
     arcade.run()
