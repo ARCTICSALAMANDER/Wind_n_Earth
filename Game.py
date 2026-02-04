@@ -27,8 +27,10 @@ class WindNEarthGame(arcade.View):
         self.totalCrystalCount = 0
         self.crystalCount = 0
 
-        self.Wind: Optional[Character] = None
-        self.Earth: Optional[Character] = None
+        self.Wind = None
+        self.Earth = None
+
+        self.explosionFxList = []
 
     def setup(self):
         """Загрузка данных уровня из JSON и подготовка спрайтов."""
@@ -53,7 +55,7 @@ class WindNEarthGame(arcade.View):
         
         if self.Earth and self.Earth.summonedThing and self.Earth.summonedThing.active:
             current_barriers.append(self.Earth.summonedThing)
-            
+
         if self.Wind and self.Earth:
             self.Wind.physEngine = arcade.PhysicsEnginePlatformer(self.Wind, current_barriers, gravity_constant=GRAVITY)
             self.Earth.physEngine = arcade.PhysicsEnginePlatformer(self.Earth, current_barriers, gravity_constant=GRAVITY)
@@ -138,7 +140,7 @@ class WindNEarthGame(arcade.View):
                 crystalData["x"],
                 crystalData["y"],
                 self,
-                crystalData.get("owner", None)
+                crystalData["owner"]
             )
             self.crystalsList.append(crystal)
 
@@ -163,6 +165,9 @@ class WindNEarthGame(arcade.View):
         self.crystalsList.draw()
         self.thingsList.draw()
         self.playersList.draw()
+
+        for fx in self.explosionFxList:
+            fx.draw()
 
         # Отображение таймера
         total_seconds = int(self.time_elapsed)
@@ -243,6 +248,12 @@ class WindNEarthGame(arcade.View):
         if self.Wind and self.Wind.physEngine:
             self.Wind.physEngine.update()
 
+        # обновляем и удаляем старые
+        for fx in self.explosionFxList:
+            fx.update()
+            if fx.can_reap():
+                self.explosionFxList.remove(fx)
+
         windStream = getattr(self.Wind, "summonedThing", None)
         if windStream and getattr(windStream, "active", False):
             for player in self.playersList:
@@ -252,6 +263,7 @@ class WindNEarthGame(arcade.View):
                         player.top = windStream.top
                         player.change_y = 0
 
+        self.crystalsList.update()
         self.crystalCount = self.totalCrystalCount - len(self.crystalsList)
 
     def on_key_press(self, key, modifiers):

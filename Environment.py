@@ -1,4 +1,6 @@
 import arcade
+from arcade.particles import FadeParticle, Emitter, EmitBurst, EmitInterval, EmitMaintainCount
+import random
 
 
 class Door(arcade.Sprite):
@@ -60,18 +62,30 @@ class Crystal(arcade.Sprite):
         self.game = game
         self.collected = False
 
+    def crystalExplosion(self):
+        '''метод создания частиц'''
+        return Emitter(
+            center_xy=(self.center_x, self.center_y),
+            emit_controller=EmitBurst(30), # выбросить 30 частиц
+            particle_factory=lambda emitter: FadeParticle(
+                filename_or_texture=arcade.make_soft_circle_texture(8, arcade.color.BABY_BLUE),
+                change_xy=arcade.math.rand_in_circle((0, 0), 3),
+                lifetime=0.5, # живут полсекунды
+                scale=0.3,
+            )
+        )
+
     def update(self, characters):
         if self.collected:
             return
 
-        for char in characters:
-            if arcade.check_for_collision(self, char):
-                if self.character == char.name:
-                    self.collected = True
-                    self.game.crystalCount += 1
-                    self.remove_from_sprite_lists()
-                    break
-
+        hit_players = arcade.check_for_collision_with_list(self, self.game.playersList)
+        for player in hit_players:
+            if player.name == self.character:
+                self.game.crystalCount += 1
+                self.game.explosionFxList.append(self.crystalExplosion())
+                self.kill()
+                
 
 class Wall(arcade.Sprite):
     def __init__(self, image, scale, x, y):
