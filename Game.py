@@ -39,6 +39,7 @@ class WindNEarthGame(arcade.View):
 
     def setup(self):
         """Загрузка данных уровня из JSON и подготовка спрайтов."""
+        print(self.levelDataFile)
         with open(self.levelDataFile, 'r', encoding='utf-8') as f:
             self.data = json.load(f)
 
@@ -57,6 +58,9 @@ class WindNEarthGame(arcade.View):
         current_barriers = arcade.SpriteList()
         for wall in self.wallsList:
             current_barriers.append(wall)
+        
+        for button in self.buttonsList:
+            current_barriers.append(button)
         
         if self.Earth and self.Earth.summonedThing and self.Earth.summonedThing.active:
             current_barriers.append(self.Earth.summonedThing)
@@ -155,6 +159,11 @@ class WindNEarthGame(arcade.View):
             door = Door(doorData["image"], doorData["x"], doorData["y"])
             self.wallsList.append(door)
 
+            for buttonData in self.data.get("buttons", []):
+                if buttonData["id"] == doorData["id"]:
+                    button = Button(buttonData["image"], buttonData["x"], buttonData["y"], door, self)
+                    self.buttonsList.append(button)
+
     def loadSprites(self):
         """Загрузка всех спрайтов уровня."""
         self.loadWalls()
@@ -192,8 +201,8 @@ class WindNEarthGame(arcade.View):
                              multiline=True,
                              width=300)
 
-        self.wallsList.draw()
         self.buttonsList.draw()
+        self.wallsList.draw()
         self.crystalsList.draw()
         self.thingsList.draw()
         self.finalDoorsList.draw()
@@ -280,6 +289,7 @@ class WindNEarthGame(arcade.View):
                 self.Earth.summonedThing.physEngine.update()
 
         self.thingsList.update(delta_time)
+        self.buttonsList.update()
 
         if self.Earth and self.Earth.physEngine:
             self.Earth.physEngine.update()

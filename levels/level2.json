@@ -17,81 +17,113 @@
             "scale": 0.5,
             "x": 32,
             "y": 32,
-            "repeat_x": 24
+            "repeat_x": 25
         },
         {
             "image": ":resources:images/tiles/grassMid.png",
             "scale": 0.5,
             "x": 32,
-            "y": 608,
-            "repeat_x": 24
-        },
-        {
-            "image": ":resources:images/tiles/grassMid.png",
-            "scale": 0.5,
-            "x": 32,
-            "y": 224,
-            "repeat_x": 10
-        },
-        {
-            "image": ":resources:images/tiles/grassMid.png",
-            "scale": 0.5,
-            "x": 224,
-            "y": 416,
-            "repeat_x": 10
-        },
-        {
-            "image": ":resources:images/tiles/grassMid.png",
-            "scale": 0.5,
-            "x": 32,
-            "y": 32,
-            "repeat_y": 19
+            "y": 64,
+            "repeat_y": 14
         },
         {
             "image": ":resources:images/tiles/grassMid.png",
             "scale": 0.5,
             "x": 768,
-            "y": 32,
-            "repeat_y": 19
+            "y": 64,
+            "repeat_y": 14
+        },
+        {
+            "image": ":resources:images/tiles/grassMid.png",
+            "scale": 0.5,
+            "x": 32,
+            "y": 600,
+            "repeat_x": 14
+        },
+        {
+            "image": ":resources:images/tiles/grassMid.png",
+            "scale": 0.5,
+            "x": 32,
+            "y": 430,
+            "repeat_x": 5
+        },
+        {
+            "image": ":resources:images/tiles/grassMid.png",
+            "scale": 0.5,
+            "x": 450,
+            "y": 430,
+            "repeat_x": 5
+        },
+        {
+            "image": ":resources:images/tiles/grassMid.png",
+            "scale": 0.5,
+            "x": 32,
+            "y": 230,
+            "repeat_x": 7
+        },
+        {
+            "image": ":resources:images/tiles/grassMid.png",
+            "scale": 0.5,
+            "x": 580,
+            "y": 230,
+            "repeat_x": 3
         }
     ],
     "crystals": [
         {
             "owner": "Earth",
             "image": ":resources:images/items/gemGreen.png",
-            "x": 300,
-            "y": 96
-        },
-        {
-            "owner": "Wind",
-            "image": ":resources:images/items/gemBlue.png",
-            "x": 300,
-            "y": 288
-        },
-        {
-            "owner": "Earth",
-            "image": ":resources:images/items/gemGreen.png",
-            "x": 500,
-            "y": 480
+            "x": 200,
+            "y": 500
         },
         {
             "owner": "Wind",
             "image": ":resources:images/items/gemBlue.png",
             "x": 600,
-            "y": 480
+            "y": 500
         }
     ],
     "final_door": {
         "image": ":resources:images/tiles/doorClosed_mid.png",
         "scale": 0.6,
-        "x1": 400,
-        "y1": 485,
+        "x1": 120,
+        "y1": 500,
         "x2": 680,
-        "y2": 485
+        "y2": 500
     },
     "summoned_things": {
         "width": 60,
         "height": 270,
         "color": [135, 206, 250, 150]
-    }
+    },
+    "doors": [
+        {
+            "image": ":resources:images/tiles/doorClosed_mid.png",
+            "x": 500,
+            "y": 513,
+            "id": 0
+        },
+        {
+            "image": ":resources:images/tiles/doorClosed_mid.png",
+            "x": 380,
+            "y": 115,
+            "id": 1
+        }
+    ],
+    "buttons": [
+        {
+            "image": ":resources:images/tiles/doorClosed_top.png",
+            "scale": 0.3,
+            "x": 260,
+            "y": 480,
+            "id": 0
+        },
+        {
+            "image": ":resources:images/tiles/doorClosed_top.png",
+            "scale": 0.3,
+            "x": 230,
+            "y": 88,
+            "id": 1
+        }
+    ]
 }

@@ -1,6 +1,7 @@
 import arcade
 from typing import Callable, Optional, Tuple
 import math
+from Consts import *
 
 
 class ActionButton(arcade.SpriteSolidColor):
@@ -52,11 +53,11 @@ class ActionButton(arcade.SpriteSolidColor):
 
     def on_click(self):
         if callable(self.action):
-            try:
-                self.action()
-            except Exception as e:
-                print(
-                    f"[ActionButton] Ошибка в обработчике кнопки '{self.label}': {e}")
+            #try:
+            self.action()
+            # except Exception as e:
+            #     print(
+            #         f"[ActionButton] Ошибка в обработчике кнопки '{self.label}': {e}")
 
     def check_mouse_over(self, x: float, y: float) -> bool:
         return (self.left <= x <= self.right) and (self.bottom <= y <= self.top)
@@ -75,10 +76,10 @@ class ActionButton(arcade.SpriteSolidColor):
 
 
 class Menu(arcade.View):
-    def __init__(self, levels: Optional[list] = None):
+    def __init__(self, levels: list[str]):
         super().__init__()
         self.title_text = "Wind & Earth"
-        self.levels = levels or ["./levels/level.json"]
+        self.levels = levels
         self.buttons_list = arcade.SpriteList()
 
     def on_show_view(self):
@@ -95,14 +96,14 @@ class Menu(arcade.View):
             label = f"Уровень {i + 1}"
 
             # Замыкание для передачи пути уровня в функцию запуска
-            def make_action(path):
-                return lambda: self._start_level(path)
+            def make_action(levelNum, path):
+                return lambda: self._start_level(levelNum, path)
 
             btn = ActionButton(
                 width=220,
                 height=50,
                 label=label,
-                action=make_action(level_path),
+                action=make_action(level_path, i+1),
                 center_x=start_x,
                 center_y=start_y - i * gap,
                 bg_color=arcade.color.DARK_SLATE_BLUE,
@@ -135,10 +136,10 @@ class Menu(arcade.View):
             font_size=12,
         )
 
-    def _start_level(self, level_json_path: str):
+    def _start_level(self, level_json_path: str, levelNum):
         print(f"[Menu] Запуск уровня: {level_json_path}")
         from Game import WindNEarthGame
-        game_view = WindNEarthGame(1, "./levels/level.json")
+        game_view = WindNEarthGame(levelNum, level_json_path)
         game_view.setup()
         self.window.show_view(game_view)
 
@@ -194,4 +195,4 @@ class LevelScoreView(arcade.View):
         
     def on_key_press(self, key, modifiers) -> None:
         if key == arcade.key.ENTER:
-            self.window.show_view(Menu())
+            self.window.show_view(Menu(LEVELS_PATHS))

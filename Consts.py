@@ -17,3 +17,5 @@ EARTH_CUBE_SIZE = 40
 GRAVITY = 0.5
 PLAYER_SPEED = 5
 PLAYER_JUMP_SPEED = 10
+
+LEVELS_PATHS = ["./levels/level.json", "./levels/level2.json"]

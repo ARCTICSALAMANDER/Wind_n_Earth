@@ -6,49 +6,65 @@ import random
 class Door(arcade.Sprite):
 
     def __init__(self, image, x, y):
-        super().__init__(image, scale=0.5)
+        super().__init__(image, scale=0.8)
         self.center_x = x
         self.center_y = y
 
-        self.closed_x = x
+        self.closed_y = y
         self.is_open = False
-        self.open_offset = 64
+        self.open_offset = self.height
 
     def open(self):
         if not self.is_open:
-            self.center_x -= self.open_offset
+            self.center_y -= self.open_offset
             self.is_open = True
 
     def close(self):
         if self.is_open:
-            self.center_x = self.closed_x
+            self.center_y = self.closed_y
             self.is_open = False
 
 
 class Button(arcade.Sprite):
-
-    def __init__(self, image, x, y, door: Door):
-        super().__init__(image, scale=0.5)
+    def __init__(self, image, x, y, door: Door, game):
+        super().__init__(image, scale=0.35)
         self.center_x = x
         self.center_y = y
+        
+        # Запоминаем начальную позицию для анимации
+        self.base_y = y
+        self.pressed_offset = 20 # На сколько пикселей кнопка уйдет вниз
 
         self.door = door
         self.isPressed = False
+        self.game = game
 
-    def update(self, characters):
-        pressed_now = False
+    def update(self, delta_time):
+        potential_pressers = arcade.SpriteList()
+        for p in self.game.playersList:
+            potential_pressers.append(p)
+            
+        earth_thing = getattr(self.game.Earth, "summonedThing", None)
+        if earth_thing and earth_thing.active:
+            potential_pressers.append(earth_thing)
 
-        for character in characters:
-            if arcade.check_for_collision(self, character):
-                pressed_now = True
-                break
+        hit_list = arcade.check_for_collision_with_list(self, potential_pressers)
+        pressed_now = len(hit_list) > 0
 
-        if pressed_now and not self.isPressed:
-            self.isPressed = True
-            self.door.open()
-        elif not pressed_now and self.isPressed:
-            self.isPressed = False
-            self.door.close()
+        if pressed_now:
+            # опускаем кнопку
+            self.center_y = self.base_y - self.pressed_offset
+            
+            if not self.isPressed:
+                self.isPressed = True
+                self.door.open()
+        else:
+            # исходное положение
+            self.center_y = self.base_y
+            
+            if self.isPressed:
+                self.isPressed = False
+                self.door.close()
 
 
 class Crystal(arcade.Sprite):
