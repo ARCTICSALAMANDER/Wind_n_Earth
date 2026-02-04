@@ -10,7 +10,7 @@ import math
 class WindNEarthGame(arcade.View):
     def __init__(self, levelDataFile: str):
         super().__init__()
-        arcade.set_background_color(arcade.color.ALICE_BLUE)
+        arcade.set_background_color(arcade.color.BLACK)
 
         self.levelDataFile = levelDataFile
         self.data = dict()
@@ -250,7 +250,7 @@ class WindNEarthGame(arcade.View):
 
         # обновляем и удаляем старые
         for fx in self.explosionFxList:
-            fx.update()
+            fx.update(delta_time)
             if fx.can_reap():
                 self.explosionFxList.remove(fx)
 
@@ -263,7 +263,7 @@ class WindNEarthGame(arcade.View):
                         player.top = windStream.top
                         player.change_y = 0
 
-        self.crystalsList.update()
+        self.crystalsList.update(delta_time)
         self.crystalCount = self.totalCrystalCount - len(self.crystalsList)
 
     def on_key_press(self, key, modifiers):

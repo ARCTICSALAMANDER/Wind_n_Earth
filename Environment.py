@@ -71,11 +71,11 @@ class Crystal(arcade.Sprite):
                 filename_or_texture=arcade.make_soft_circle_texture(8, arcade.color.BABY_BLUE),
                 change_xy=arcade.math.rand_in_circle((0, 0), 3),
                 lifetime=0.5, # живут полсекунды
-                scale=0.3,
+                scale=0.7,
             )
         )
 
-    def update(self, characters):
+    def update(self, delta_time):
         if self.collected:
             return
 
@@ -84,7 +84,9 @@ class Crystal(arcade.Sprite):
             if player.name == self.character:
                 self.game.crystalCount += 1
                 self.game.explosionFxList.append(self.crystalExplosion())
+                self.collected = True
                 self.kill()
+                break
                 
 
 class Wall(arcade.Sprite):
