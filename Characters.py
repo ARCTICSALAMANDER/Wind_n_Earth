@@ -91,17 +91,14 @@ class SummonedThing(arcade.SpriteSolidColor):
 
         self.timer = 0
 
-    def update(self, delta_time):
-        if not self.active:
-            return 
-
 
 class WindStream(SummonedThing):
     def __init__(self, width, height, wind: Character):
         super().__init__(width, height, WIND_STREAM_COLOR, wind)
 
     def update(self, delta_time):
-        super().update(delta_time)
+        if not self.active:
+            return
         
         # по идее должен красиво мерцать
         self.timer += delta_time
@@ -111,13 +108,14 @@ class WindStream(SummonedThing):
 class EarthCube(SummonedThing):
     def __init__(self, earth: Character, game):
         super().__init__(EARTH_CUBE_SIZE, EARTH_CUBE_SIZE, EARTH_CUBE_COLOR, earth)
-        print(earth.height, self.height)
         self.game = game
 
         self.physEngine = arcade.PhysicsEnginePlatformer(self, self.game.wallsList, GRAVITY)
 
     def update(self, delta_time):
-        super().update(delta_time)
+        if not self.active:
+            return
+        
         self.change_x = 0
 
         hit_players = arcade.check_for_collision_with_list(self, self.game.playersList)
