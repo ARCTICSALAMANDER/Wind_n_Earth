@@ -1,21 +1,87 @@
 {
-  "players": [
-    { "name": "Wind", "image": ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png", "scale": 0.8, "x": 100, "y": 150 },
-    { "name": "Earth", "image": ":resources:images/animated_characters/robot/robot_idle.png", "scale": 0.8, "x": 150, "y": 150 }
-  ],
-  "walls_static": [
-    { "description": "Floor", "image": ":resources:images/tiles/stoneMid.png", "scale": 0.5, "x": 32, "y": 32, "repeat_x": 13 }
-  ],
-  "crystals": [
-    { "owner": "Wind", "image": ":resources:images/items/gemBlue.png", "scale": 0.5, "x": 400, "y": 200 },
-    { "owner": "Earth", "image": ":resources:images/items/gemGreen.png", "scale": 0.5, "x": 500, "y": 200 }
-  ],
-  "doors": [
-    { "id": "door1", "image": ":resources:images/tiles/boxCrate_double.png", "x": 700, "y": 96 }
-  ],
-  "summoned_things": {
-    "width": 64,
-    "height": 150,
-    "color": [135, 206, 250, 150]
-  }
+    "players": [
+        {
+            "name": "Wind",
+            "image": ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png",
+            "scale": 0.8,
+            "x": 100,
+            "y": 120
+        },
+        {
+            "name": "Earth",
+            "image": ":resources:images/animated_characters/robot/robot_idle.png",
+            "scale": 0.8,
+            "x": 150,
+            "y": 120
+        }
+    ],
+    "walls_static": [
+        {
+            "image": ":resources:images/tiles/grassMid.png",
+            "scale": 0.5,
+            "x": 32,
+            "y": 32,
+            "repeat_x": 13
+        },
+        {
+            "image": ":resources:images/tiles/grassMid.png",
+            "scale": 0.5,
+            "x": 32,
+            "y": 224,
+            "repeat_x": 10
+        },
+        {
+            "image": ":resources:images/tiles/grassMid.png",
+            "scale": 0.5,
+            "x": 224,
+            "y": 416,
+            "repeat_x": 10
+        },
+        {
+            "image": ":resources:images/tiles/grassMid.png",
+            "scale": 0.5,
+            "x": 32,
+            "y": 32,
+            "repeat_y": 10
+        },
+        {
+            "image": ":resources:images/tiles/grassMid.png",
+            "scale": 0.5,
+            "x": 768,
+            "y": 32,
+            "repeat_y": 10
+        }
+    ],
+    "crystals": [
+        {
+            "owner": "Earth",
+            "image": ":resources:images/items/gemGreen.png",
+            "x": 300,
+            "y": 96
+        },
+        {
+            "owner": "Wind",
+            "image": ":resources:images/items/gemBlue.png",
+            "x": 300,
+            "y": 288
+        },
+        {
+            "owner": "Earth",
+            "image": ":resources:images/items/gemGreen.png",
+            "x": 500,
+            "y": 480
+        },
+        {
+            "owner": "Wind",
+            "image": ":resources:images/items/gemBlue.png",
+            "x": 600,
+            "y": 480
+        }
+    ],
+    "doors": [],
+    "summoned_things": {
+        "width": 60,
+        "height": 260,
+        "color": [135, 206, 250, 150]
+    }
 }

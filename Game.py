@@ -45,6 +45,19 @@ class WindNEarthGame(arcade.View):
         self.time_elapsed = 0.0
         self.paused = False
 
+    def update_player_physics(self):
+        '''Обновляет список объектов, с которыми сталкиваются игроки'''
+        current_barriers = arcade.SpriteList()
+        for wall in self.wallsList:
+            current_barriers.append(wall)
+        
+        if self.Earth and self.Earth.summonedThing.active:
+            current_barriers.append(self.Earth.summonedThing)
+
+        if self.Wind and self.Earth:
+            self.Wind.physEngine = arcade.PhysicsEnginePlatformer(self.Wind, current_barriers, gravity_constant=GRAVITY)
+            self.Earth.physEngine = arcade.PhysicsEnginePlatformer(self.Earth, current_barriers, gravity_constant=GRAVITY)
+
     def loadCharacters(self):
         """Создание объектов персонажей Wind и Earth."""
         players_data = self.data.get("players", [])
@@ -218,6 +231,7 @@ class WindNEarthGame(arcade.View):
             self.Wind.move()
         if self.Earth:
             self.Earth.move()
+            self.Earth.summonedThing.physEngine.update()
 
         self.thingsList.update(delta_time)
 
