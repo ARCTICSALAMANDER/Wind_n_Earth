@@ -178,12 +178,26 @@ class WindNEarthGame(arcade.View):
     def on_draw(self):
         self.clear()
 
+        if self.levelNum == 1:
+            arcade.draw_text("Для управления Ветром \nиспользуйте стрелки,\nдля управления Землей - \nклавиши WAD", 
+                             250, 
+                             150, 
+                             color=arcade.color.WHITE,
+                             multiline=True,
+                             width=300)
+            arcade.draw_text("Иногда вам понадобится \nпрыгнуть выше, чем может персонаж.\nВ таких случаях нажмите клавишу Ю \n(или '.' на англ.раскладке)", 
+                             450, 
+                             150, 
+                             arcade.color.WHITE,
+                             multiline=True,
+                             width=300)
+
         self.wallsList.draw()
         self.buttonsList.draw()
         self.crystalsList.draw()
         self.thingsList.draw()
-        self.playersList.draw()
         self.finalDoorsList.draw()
+        self.playersList.draw()
 
         for fx in self.explosionFxList:
             fx.draw()

@@ -176,11 +176,11 @@ class LevelScoreView(arcade.View):
                          align="center")
         arcade.draw_text(f"за {int(self.game.time_elapsed)}с", 
                          self.width / 2 - 10, 
-                         self.height - 65, 
+                         self.height - 55, 
                          font_size=15, 
                          align="center")
 
-        arcade.draw_text(f"Вы собрали {self.game.crystalCount} из {self.game.totalCrystalCount}", 
+        arcade.draw_text(f"Вы собрали {self.game.crystalCount} из {self.game.totalCrystalCount} кристаллов", 
                          self.width / 2 - 150, 
                          self.height - 90, 
                          font_size=18, 
