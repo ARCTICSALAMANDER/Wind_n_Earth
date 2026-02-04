@@ -29,13 +29,14 @@ class Character(arcade.Sprite):
         '''Метод создания физических движков'''
         self.physEngine = arcade.PhysicsEnginePlatformer(
             self, self.game.wallsList, gravity_constant=0.5)
-        
+
         self.summonedThingSetup()
-        
+
     def summonedThingSetup(self):
         '''Метод создания кубика Земли или воздушного потока Ветра'''
         thingParams = self.game.data["summoned_things"]
-        self.summonedThing = SummonedThing(thingParams["width"], thingParams["height"], thingParams["color"], self, self.game)
+        self.summonedThing = SummonedThing(
+            thingParams["width"], thingParams["height"], thingParams["color"], self, self.game)
 
     def on_key_press(self, key, modifiers):
         self.pressedKeys.add(key)
@@ -60,7 +61,7 @@ class Character(arcade.Sprite):
 
         self.summonedThing.center_x = self.center_x
         self.summonedThing.bottom = self.bottom
-        
+
         if self.summonedThing not in self.game.thingsList:
             self.game.thingsList.append(self.summonedThing)
 
@@ -94,8 +95,8 @@ class SummonedThing(arcade.SpriteSolidColor):
 
         if self.owner.name == "Wind":
             self.timer += delta_time
-            self.alpha = int(140 + math.sin(self.timer * 6) * 40)       
+            self.alpha = int(140 + math.sin(self.timer * 6) * 40)
         elif self.owner.name == "Earth":
-            # Куб земли просто стоит там, где его создали, 
+            # Куб земли просто стоит там, где его создали,
             # но его сделать толкаемым
             pass

@@ -72,6 +72,7 @@ class Crystal(arcade.Sprite):
                     self.remove_from_sprite_lists()
                     break
 
+
 class Wall(arcade.Sprite):
     def __init__(self, image, scale, x, y):
         super().__init__(image, scale)

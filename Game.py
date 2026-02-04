@@ -182,12 +182,14 @@ class WindNEarthGame(arcade.View):
         if self.paused:
             overlay_w = 400
             overlay_h = 200
+            rect = arcade.rect.XYWH(self.width / 2,
+                                    self.height / 2,
+                                    overlay_w,
+                                    overlay_h,)
+
             arcade.draw_rect_filled(
-                self.width / 2,
-                self.height / 2,
-                overlay_w,
-                overlay_h,
-                arcade.color.BLACK_FROM_SPACE,
+                rect,
+                arcade.color.BLACK,
                 180
             )
             arcade.draw_text(
@@ -219,9 +221,9 @@ class WindNEarthGame(arcade.View):
 
         self.thingsList.update(delta_time)
 
-        if getattr(self.Earth, "physEngine", None):
+        if self.Earth and self.Earth.physEngine:
             self.Earth.physEngine.update()
-        if getattr(self.Wind, "physEngine", None):
+        if self.Wind and self.Wind.physEngine:
             self.Wind.physEngine.update()
 
         windStream = getattr(self.Wind, "summonedThing", None)
@@ -251,12 +253,7 @@ class WindNEarthGame(arcade.View):
             self.Earth.on_key_release(key, modifiers)
 
 
-if __name__ == '__main__':
-    window = WindNEarthGame(
-        SCREEN_WIDTH,
-        SCREEN_HEIGHT,
-        SCREEN_TITLE,
-        "levels/level.json"
-    )
-    window.setup()
-    arcade.run()
+# if __name__ == '__main__':
+#     window = WindNEarthGame("levels/level.json")
+#     window.setup()
+#     arcade.run()

@@ -1,6 +1,7 @@
 import arcade
 from typing import Callable, Optional, Tuple
 
+
 class ActionButton(arcade.SpriteSolidColor):
     def __init__(
         self,
@@ -28,10 +29,9 @@ class ActionButton(arcade.SpriteSolidColor):
         self.is_pressed = False
 
     def draw(self):
-        super().draw()
-
         if self.is_hovered:
-            rect = arcade.rect.XYWH(self.center_x, self.center_y, self.width+4, self.height+4)
+            rect = arcade.rect.XYWH(
+                self.center_x, self.center_y, self.width+4, self.height+4)
             arcade.draw_rect_outline(
                 rect,
                 color=arcade.color.LIGHT_GRAY,
@@ -55,7 +55,8 @@ class ActionButton(arcade.SpriteSolidColor):
             try:
                 self.action()
             except Exception as e:
-                print(f"[ActionButton] Ошибка в обработчике кнопки '{self.label}': {e}")
+                print(
+                    f"[ActionButton] Ошибка в обработчике кнопки '{self.label}': {e}")
 
     def check_mouse_over(self, x: float, y: float) -> bool:
         # Стандартная проверка попадания точки в прямоугольник спрайта
@@ -78,7 +79,8 @@ class Menu(arcade.View):
     def __init__(self, levels: Optional[list] = None):
         super().__init__()
         self.title_text = "Wind & Earth"
-        self.levels = levels or ["./levels/level.json"] # Путь должен соответствовать твоей папке
+        # Путь должен соответствовать твоей папке
+        self.levels = levels or ["./levels/level.json"]
         self.buttons_list = arcade.SpriteList()
 
     def on_show_view(self):
@@ -93,7 +95,7 @@ class Menu(arcade.View):
 
         for i, level_path in enumerate(self.levels):
             label = f"Уровень {i + 1}"
-            
+
             # Замыкание для передачи пути уровня в функцию запуска
             def make_action(path):
                 return lambda: self._start_level(path)
@@ -139,7 +141,7 @@ class Menu(arcade.View):
         print(f"[Menu] Запуск уровня: {level_json_path}")
         # ВАЖНО: Убедись, что в Game.py класс игры теперь наследуется от arcade.View, а не arcade.Window
         from Game import WindNEarthGame
-        game_view = WindNEarthGame(self.window.width, self.window.height, "Ветер и Земля", "./levels/level.json")
+        game_view = WindNEarthGame("./levels/level.json")
         game_view.setup()
         self.window.show_view(game_view)
 
