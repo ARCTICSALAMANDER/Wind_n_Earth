@@ -4,9 +4,9 @@ from Characters import Character
 from Environment import *
 from Consts import *
 
-class WindNEarthGame(arcade.Window):
-    def __init__(self, width, height, title, levelDataFile: str):
-        super().__init__(width, height, title)
+class WindNEarthGame(arcade.View):
+    def __init__(self, levelDataFile: str):
+        super().__init__()
         arcade.set_background_color(arcade.color.ALICE_BLUE)
         self.levelDataFile = levelDataFile
         self.data = dict()
@@ -156,8 +156,3 @@ class WindNEarthGame(arcade.Window):
     def on_key_release(self, key, modifiers):
         self.Wind.on_key_release(key, modifiers)
         self.Earth.on_key_release(key, modifiers)
-
-if __name__ == '__main__':
-    window = WindNEarthGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, "./level.json")
-    window.setup()
-    arcade.run()
