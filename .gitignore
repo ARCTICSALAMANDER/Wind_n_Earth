@@ -1,2 +1,6 @@
 *.pyc
 __pycache__/
+*.spec
+dist/
+build/
+*.sqlite

@@ -53,7 +53,7 @@ class ActionButton(arcade.SpriteSolidColor):
 
     def on_click(self):
         if callable(self.action):
-            #try:
+            # try:
             self.action()
             # except Exception as e:
             #     print(
@@ -160,9 +160,10 @@ class LevelScoreView(arcade.View):
     def __init__(self, game, levelNum):
         super().__init__()
         arcade.set_background_color(arcade.color.DARK_MIDNIGHT_BLUE)
-        
+
         self.game = game
         self.levelNum = levelNum
+        self.best_time = self.game.db.get_best_time(self.levelNum)
 
     def on_show_view(self) -> None:
         arcade.set_background_color(arcade.color.DARK_MIDNIGHT_BLUE)
@@ -170,29 +171,36 @@ class LevelScoreView(arcade.View):
     def on_draw(self):
         self.clear()
 
-        arcade.draw_text(f"Уровень {self.levelNum} пройден", 
-                         self.width / 2 - 150, 
-                         self.height - 30, 
-                         font_size=25, 
-                         align="center")
-        arcade.draw_text(f"за {int(self.game.time_elapsed)}с", 
-                         self.width / 2 - 10, 
-                         self.height - 55, 
-                         font_size=15, 
+        arcade.draw_text(f"Уровень {self.levelNum} пройден",
+                         self.width / 2 - 150,
+                         self.height - 50,
+                         font_size=25,
                          align="center")
 
-        arcade.draw_text(f"Вы собрали {self.game.crystalCount} из {self.game.totalCrystalCount} кристаллов", 
-                         self.width / 2 - 150, 
-                         self.height - 90, 
-                         font_size=18, 
+        arcade.draw_text(f"за {int(self.game.time_elapsed)}с",
+                         self.width / 2 - 10,
+                         self.height - 120,
+                         font_size=15,
                          align="center")
-        
-        arcade.draw_text("Нажмите ENTER чтобы продолжить", 
-                         self.width / 2 - 190, 
-                         self.height - 150, 
-                         font_size=20, 
+
+        arcade.draw_text(f"Рекорд уровня: {self.best_time}с",
+                         self.width / 2 - 40, 
+                         self.height - 150,
+                         color=arcade.color.GOLD, 
+                         font_size=18)
+
+        arcade.draw_text(f"Вы собрали {self.game.crystalCount} из {self.game.totalCrystalCount} кристаллов",
+                         self.width / 2 - 150,
+                         self.height - 200,
+                         font_size=18,
                          align="center")
-        
+
+        arcade.draw_text("Нажмите ENTER чтобы продолжить",
+                         self.width / 2 - 190,
+                         self.height - 150,
+                         font_size=20,
+                         align="center")
+
     def on_key_press(self, key, modifiers) -> None:
         if key == arcade.key.ENTER:
             self.window.show_view(Menu(LEVELS_PATHS))

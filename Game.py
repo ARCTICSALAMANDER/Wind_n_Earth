@@ -3,8 +3,7 @@ import json
 from Characters import Character
 from Environment import *
 from Consts import *
-from typing import Optional
-import math
+from DBManager import DBManager
 
 
 class WindNEarthGame(arcade.View):
@@ -36,6 +35,9 @@ class WindNEarthGame(arcade.View):
         self.windFinalDoor = None
         self.earthFinalDoor = None
         self.finalDoorsList = arcade.SpriteList()
+
+        self.db = DBManager()
+        self.db.dbSetup()
 
     def setup(self):
         """Загрузка данных уровня из JSON и подготовка спрайтов."""
@@ -182,6 +184,7 @@ class WindNEarthGame(arcade.View):
 
     def finish_level(self):
         from Interface import LevelScoreView
+        self.db.saveRecord(self.levelNum, int(self.time_elapsed))
         self.window.show_view(LevelScoreView(self, self.levelNum))
     
     def on_draw(self):
