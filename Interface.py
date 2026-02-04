@@ -28,6 +28,8 @@ class ActionButton(arcade.SpriteSolidColor):
         self.is_pressed = False
 
     def draw(self):
+        super().draw()
+
         if self.is_hovered:
             rect = arcade.rect.XYWH(self.center_x, self.center_y, self.width+4, self.height+4)
             arcade.draw_rect_outline(
@@ -36,6 +38,7 @@ class ActionButton(arcade.SpriteSolidColor):
                 border_width=2,
             )
 
+        # Исправлено: аргументы start_x и start_y вместо x и y
         arcade.draw_text(
             self.label,
             x=self.center_x,
@@ -134,8 +137,9 @@ class Menu(arcade.View):
 
     def _start_level(self, level_json_path: str):
         print(f"[Menu] Запуск уровня: {level_json_path}")
+        # ВАЖНО: Убедись, что в Game.py класс игры теперь наследуется от arcade.View, а не arcade.Window
         from Game import WindNEarthGame
-        game_view = WindNEarthGame("./levels/level.json")
+        game_view = WindNEarthGame(self.window.width, self.window.height, "Ветер и Земля", "./levels/level.json")
         game_view.setup()
         self.window.show_view(game_view)
 
