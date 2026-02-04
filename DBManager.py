@@ -29,7 +29,10 @@ class DBManager():
                     UPDATE records SET time = ? WHERE level = ?
                 ''', (time, level))
 
+        self.con.commit()
+
     def get_best_time(self, level):
         self.cur.execute('SELECT time FROM records WHERE level = ?', (level,))
-        res = self.cur.fetchone()
+        res = self.cur.fetchall()
+        res.sort(key=lambda x: x[0])
         return res[0] if res else "--"

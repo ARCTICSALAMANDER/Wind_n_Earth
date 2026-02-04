@@ -183,7 +183,7 @@ class LevelScoreView(arcade.View):
                          font_size=15,
                          align="center")
 
-        arcade.draw_text(f"Рекорд уровня: {self.best_time}с",
+        arcade.draw_text(f"Рекорд уровня: {self.best_time[0]}с",
                          self.width / 2 - 40, 
                          self.height - 150,
                          color=arcade.color.GOLD, 
@@ -197,7 +197,7 @@ class LevelScoreView(arcade.View):
 
         arcade.draw_text("Нажмите ENTER чтобы продолжить",
                          self.width / 2 - 190,
-                         self.height - 150,
+                         self.height - 300,
                          font_size=20,
                          align="center")
 
