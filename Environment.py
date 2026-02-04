@@ -93,3 +93,23 @@ class Wall(arcade.Sprite):
     def __init__(self, image, scale, x, y):
         super().__init__(image, scale)
         self.position = (x, y)
+
+
+class FinalDoor(arcade.Sprite):
+    def __init__(self, image, scale, x, y, tint_color, character, game):
+        super().__init__(image, scale)
+        self.color = tint_color
+        self.character = character
+        self.game = game
+        self.activated = False
+
+        self.position = (x, y)
+
+    def update(self, delta_time):
+        hit_players = arcade.check_for_collision_with_list(self, self.game.playersList)
+        for player in hit_players:
+            if player.name == self.character:
+                self.activated = True
+                break
+        else:
+            self.activated = False

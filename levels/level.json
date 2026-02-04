@@ -2,15 +2,11 @@
     "players": [
         {
             "name": "Wind",
-            "image": ":resources:images/animated_characters/female_adventurer/femaleAdventurer_idle.png",
-            "scale": 0.8,
             "x": 100,
             "y": 120
         },
         {
             "name": "Earth",
-            "image": ":resources:images/animated_characters/robot/robot_idle.png",
-            "scale": 0.8,
             "x": 150,
             "y": 120
         }
@@ -78,10 +74,17 @@
             "y": 480
         }
     ],
-    "doors": [],
+    "final_door": {
+        "image": ":resources:images/tiles/doorClosed_mid.png",
+        "scale": 0.6,
+        "x1": 400,
+        "y1": 485,
+        "x2": 680,
+        "y2": 485
+    },
     "summoned_things": {
         "width": 60,
-        "height": 260,
+        "height": 270,
         "color": [135, 206, 250, 150]
     }
 }

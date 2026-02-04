@@ -1,5 +1,6 @@
 import arcade
 from typing import Callable, Optional, Tuple
+import math
 
 
 class ActionButton(arcade.SpriteSolidColor):
@@ -38,7 +39,6 @@ class ActionButton(arcade.SpriteSolidColor):
                 border_width=2,
             )
 
-        # Исправлено: аргументы start_x и start_y вместо x и y
         arcade.draw_text(
             self.label,
             x=self.center_x,
@@ -59,7 +59,6 @@ class ActionButton(arcade.SpriteSolidColor):
                     f"[ActionButton] Ошибка в обработчике кнопки '{self.label}': {e}")
 
     def check_mouse_over(self, x: float, y: float) -> bool:
-        # Стандартная проверка попадания точки в прямоугольник спрайта
         return (self.left <= x <= self.right) and (self.bottom <= y <= self.top)
 
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
@@ -79,7 +78,6 @@ class Menu(arcade.View):
     def __init__(self, levels: Optional[list] = None):
         super().__init__()
         self.title_text = "Wind & Earth"
-        # Путь должен соответствовать твоей папке
         self.levels = levels or ["./levels/level.json"]
         self.buttons_list = arcade.SpriteList()
 
@@ -139,9 +137,8 @@ class Menu(arcade.View):
 
     def _start_level(self, level_json_path: str):
         print(f"[Menu] Запуск уровня: {level_json_path}")
-        # ВАЖНО: Убедись, что в Game.py класс игры теперь наследуется от arcade.View, а не arcade.Window
         from Game import WindNEarthGame
-        game_view = WindNEarthGame("./levels/level.json")
+        game_view = WindNEarthGame(1, "./levels/level.json")
         game_view.setup()
         self.window.show_view(game_view)
 
@@ -156,3 +153,45 @@ class Menu(arcade.View):
     def on_mouse_release(self, x, y, button, modifiers):
         for btn in self.buttons_list:
             btn.on_mouse_release(x, y, button, modifiers)
+
+
+class LevelScoreView(arcade.View):
+    def __init__(self, game, levelNum):
+        super().__init__()
+        arcade.set_background_color(arcade.color.DARK_MIDNIGHT_BLUE)
+        
+        self.game = game
+        self.levelNum = levelNum
+
+    def on_show_view(self) -> None:
+        arcade.set_background_color(arcade.color.DARK_MIDNIGHT_BLUE)
+
+    def on_draw(self):
+        self.clear()
+
+        arcade.draw_text(f"Уровень {self.levelNum} пройден", 
+                         self.width / 2 - 150, 
+                         self.height - 30, 
+                         font_size=25, 
+                         align="center")
+        arcade.draw_text(f"за {int(self.game.time_elapsed)}с", 
+                         self.width / 2 - 10, 
+                         self.height - 65, 
+                         font_size=15, 
+                         align="center")
+
+        arcade.draw_text(f"Вы собрали {self.game.crystalCount} из {self.game.totalCrystalCount}", 
+                         self.width / 2 - 150, 
+                         self.height - 90, 
+                         font_size=18, 
+                         align="center")
+        
+        arcade.draw_text("Нажмите ENTER чтобы продолжить", 
+                         self.width / 2 - 190, 
+                         self.height - 150, 
+                         font_size=20, 
+                         align="center")
+        
+    def on_key_press(self, key, modifiers) -> None:
+        if key == arcade.key.ENTER:
+            self.window.show_view(Menu())

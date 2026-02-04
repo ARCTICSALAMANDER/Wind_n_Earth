@@ -8,10 +8,11 @@ import math
 
 
 class WindNEarthGame(arcade.View):
-    def __init__(self, levelDataFile: str):
+    def __init__(self, levelNum, levelDataFile: str):
         super().__init__()
         arcade.set_background_color(arcade.color.BLACK)
 
+        self.levelNum = levelNum
         self.levelDataFile = levelDataFile
         self.data = dict()
 
@@ -31,6 +32,10 @@ class WindNEarthGame(arcade.View):
         self.Earth = None
 
         self.explosionFxList = []
+
+        self.windFinalDoor = None
+        self.earthFinalDoor = None
+        self.finalDoorsList = arcade.SpriteList()
 
     def setup(self):
         """Загрузка данных уровня из JSON и подготовка спрайтов."""
@@ -156,7 +161,20 @@ class WindNEarthGame(arcade.View):
         self.loadCrystals()
         self.loadCharacters()
         self.loadDoorsNButtons()
+        self.loadFinalDoors()
 
+    def loadFinalDoors(self):
+        finalDoorData = self.data["final_door"]
+        self.windFinalDoor = FinalDoor(finalDoorData["image"], finalDoorData["scale"], finalDoorData["x1"], finalDoorData["y1"], (135, 206, 250), "Wind", self)
+        self.earthFinalDoor = FinalDoor(finalDoorData["image"], finalDoorData["scale"], finalDoorData["x2"], finalDoorData["y2"], (152, 251, 152), "Earth", self)
+
+        self.finalDoorsList.append(self.windFinalDoor)
+        self.finalDoorsList.append(self.earthFinalDoor)
+
+    def finish_level(self):
+        from Interface import LevelScoreView
+        self.window.show_view(LevelScoreView(self, self.levelNum))
+    
     def on_draw(self):
         self.clear()
 
@@ -165,6 +183,7 @@ class WindNEarthGame(arcade.View):
         self.crystalsList.draw()
         self.thingsList.draw()
         self.playersList.draw()
+        self.finalDoorsList.draw()
 
         for fx in self.explosionFxList:
             fx.draw()
@@ -181,7 +200,7 @@ class WindNEarthGame(arcade.View):
             f"Время: {time_str}",
             padding,
             self.height - padding - font_size,
-            arcade.color.BLACK,
+            arcade.color.WHITE,
             font_size
         )
 
@@ -191,7 +210,7 @@ class WindNEarthGame(arcade.View):
             f"Кристаллы: {collected} / {self.totalCrystalCount}",
             self.width - padding,
             self.height - padding - font_size,
-            arcade.color.BLACK,
+            arcade.color.WHITE,
             font_size,
             anchor_x="right"
         )
@@ -207,7 +226,7 @@ class WindNEarthGame(arcade.View):
 
             arcade.draw_rect_filled(
                 rect,
-                arcade.color.BLACK,
+                arcade.color.DARK_MIDNIGHT_BLUE,
                 180
             )
             arcade.draw_text(
@@ -229,6 +248,11 @@ class WindNEarthGame(arcade.View):
 
     def on_update(self, delta_time):
         """Обновление состояния игры каждый кадр."""
+        self.finalDoorsList.update()
+
+        if self.earthFinalDoor.activated and self.windFinalDoor.activated:
+            self.finish_level()
+
         if not self.paused:
             self.time_elapsed += delta_time
 
